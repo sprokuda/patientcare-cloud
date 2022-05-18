@@ -15,8 +15,7 @@
     <Keyword>QtVS_v304</Keyword>
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'">10.0.22000.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'">10.0.22000.0</WindowsTargetPlatformVersion>
-    <QtMsBuild Condition="'$(QtMsBuild)'=='' OR !Exists('$(QtMsBuild)\qt.targets')"
-      >$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
+    <QtMsBuild Condition="'$(QtMsBuild)'=='' OR !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="Configuration">
@@ -41,11 +40,8 @@
     <QtModules>core;sql;gui;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
-  <Target Name="QtMsBuildNotFound"
-    BeforeTargets="CustomBuild;ClCompile"
-    Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
-    <Message Importance="High"
-      Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
+  <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
+    <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
   </Target>
   <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Label="Shared" />
@@ -59,9 +55,25 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'">
+    <ExternalIncludePath>C:\libs\chilkat-9.5.0-x86-vc2019\include;C:\libs\nlohmann\single_include\nlohmann;C:\sprokuda\patientcare-cloud\Common;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'">
+    <ExternalIncludePath>C:\libs\chilkat-9.5.0-x86-vc2019\include;C:\libs\nlohmann\single_include\nlohmann;C:\sprokuda\patientcare-cloud\Common;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
   </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Link>
+      <AdditionalLibraryDirectories>C:\libs\chilkat-9.5.0-x86-vc2019\libs</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ChilkatRel.lib;ChilkatRelDll.lib;crypt32.lib;ws2_32.lib;dnsapi.lib;%(AdditionalDependencies);$(Qt_LIBS_)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Link>
+      <AdditionalLibraryDirectories>C:\libs\chilkat-9.5.0-x86-vc2019\libs</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ChilkatDbg.lib;ChilkatDbgDll.lib;crypt32.lib;ws2_32.lib;dnsapi.lib;%(AdditionalDependencies);$(Qt_LIBS_)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>libcmtd.lib</IgnoreSpecificDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="Configuration">
     <ClCompile>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
@@ -89,12 +101,63 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <QtRcc Include="PatientCareCloudWidget.qrc"/>
-    <QtUic Include="PatientCareCloudWidget.ui"/>
-    <QtMoc Include="PatientCareCloudWidget.h"/>
-    <ClCompile Include="PatientCareCloudWidget.cpp"/>
-    <ClCompile Include="main.cpp"/>
-
+    <ClCompile Include="..\Common\ChilkatFTPS.cpp" />
+    <ClCompile Include="..\Common\csvWriter.cpp" />
+    <ClCompile Include="..\Common\patientCareLog.cpp" />
+    <ClCompile Include="QtDatePicker.cpp" />
+    <ClCompile Include="QtDatePickerPopup.cpp" />
+    <ClCompile Include="QtMultiSelect.cpp" />
+    <ClCompile Include="QtMultiSelectPopup.cpp" />
+    <ClCompile Include="QtSingleSelect.cpp" />
+    <ClCompile Include="QtSingleSelectPopup.cpp" />
+    <QtRcc Include="PatientCareCloudWidget.qrc" />
+    <QtUic Include="PatientCareCloudWidget.ui" />
+    <QtMoc Include="PatientCareCloudWidget.h" />
+    <ClCompile Include="AdvancedSettingsWidget.cpp" />
+    <ClCompile Include="callDelay.cpp" />
+    <ClCompile Include="dbClient.cpp" />
+    <ClCompile Include="ManualSyncWidget.cpp" />
+    <ClCompile Include="PatientCareCloudWidget.cpp" />
+    <ClCompile Include="config_main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="dbClient.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="AdvancedSettingsWidget.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="callDelay.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="ManualSyncWidget.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="QtDatePicker.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="QtDatePickerPopup.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="QtMultiSelect.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="QtMultiSelectPopup.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="QtSingleSelect.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="QtSingleSelectPopup.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="..\Common\csvWriter.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Common\ChilkatFTPS.h" />
+    <ClInclude Include="..\Common\De_Clinician_Details.h" />
+    <ClInclude Include="..\Common\De_FollowApp0403.h" />
+    <ClInclude Include="..\Common\patientCareLog.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
