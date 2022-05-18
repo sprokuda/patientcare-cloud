@@ -43,11 +43,12 @@ private:
 
 private slots:
     void onDbconnectError(QString message);
-    void onDbSuccessful();
+    void onDbSuccessful(QString message);
 
     void onEmitLocations(vector<pair<QString, QString>> v);
     void onEmitBooks(vector<pair<QString, QString>> v);
 
+    void onEmitDsnSelected(QString item_text);
     void onEmitLocationSelected(QString item_text);
 
     void onResetButtonClicked();
@@ -74,7 +75,7 @@ private:
     QThread* thread;
 
     const QStringList m_dsns;
-
+    QString m_lastConnectedDsn;
     vector<pair<QString, QString>> m_books;
     vector<pair<QString, QString>> m_locations;
     map<QCheckBox*, QString> m_checks;

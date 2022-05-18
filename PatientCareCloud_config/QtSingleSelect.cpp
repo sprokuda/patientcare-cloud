@@ -44,6 +44,46 @@ void QtSingleSelect::selectFirstItem()
     edit->setText((*edit_list.begin())->text());
 }
 
+bool QtSingleSelect::selectItem(QString item_name)
+{
+    auto& box_list = popup->getBoxList();
+    auto& edit_list = popup->getEditList();
+ 
+    auto it1 = edit_list.begin();
+    auto it2 = box_list.begin();
+
+    while (it1 != edit_list.end())
+    {
+        if ((*it1)->text() == item_name) break;
+        ++it1;
+        ++it2;
+    }
+
+    if (it1 != edit_list.end())
+    {
+        unCheckAll();
+        (*it2)->setCheckState(Qt::Checked);
+        edit->setText((*it1)->text());
+        return true;
+    }
+    else return false;
+}
+
+
+void QtSingleSelect::unCheckAll()
+{
+    auto& box_list = popup->getBoxList();
+
+    auto it1 = box_list.begin();
+
+    while (it1 != box_list.end())
+    {
+        (*it1)->setCheckState(Qt::Unchecked);
+        ++it1;
+    }
+
+}
+
 void QtSingleSelect::onClickCatch(int value)
 {
     edit->setText(QString::number(value));

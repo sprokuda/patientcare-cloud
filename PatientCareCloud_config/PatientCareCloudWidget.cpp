@@ -5,7 +5,7 @@
 extern QString absoluteApplicationPath;
 
 PatientCareCloudWidget::PatientCareCloudWidget(QSettings& _settings,const QStringList& _dsns, QWidget* parent)
-    : m_settings(_settings), m_dsns(_dsns), QWidget(parent)
+    : m_settings(_settings), m_dsns(_dsns), m_lastConnectedDsn(""), QWidget(parent)
 {
     db = new dbClient(_settings, this);
     thread = new QThread();
@@ -23,7 +23,7 @@ PatientCareCloudWidget::PatientCareCloudWidget(QSettings& _settings,const QStrin
     dsnSelect = new QtSingleSelect(this);
 
     dsnSelect->getPopup().setTable(m_dsns);
-    dsnSelect->selectFirstItem();
+//    dsnSelect->selectFirstItem();
 
     locationsLabel = new QLabel("Location", this);
     locationsSelect = new QtSingleSelect(this);
@@ -97,6 +97,7 @@ PatientCareCloudWidget::PatientCareCloudWidget(QSettings& _settings,const QStrin
     connect(saveButton, &QPushButton::clicked, this, &PatientCareCloudWidget::onSaveButtonClicked);
     connect(exitButton, &QPushButton::clicked, this, &PatientCareCloudWidget::onExitButtonClicked);
 
+    connect(dsnSelect, SIGNAL(emitItemSelected(QString)), this, SLOT(onEmitDsnSelected(QString)));
 
     connect(locationsSelect, SIGNAL(emitItemSelected(QString)), this, SLOT(onEmitLocationSelected(QString)));
 
@@ -109,7 +110,7 @@ PatientCareCloudWidget::PatientCareCloudWidget(QSettings& _settings,const QStrin
     void serviceRestartSuccess();
     void serviceRestartFailed();
     connect(db, SIGNAL(dbConnectError(QString)), this, SLOT(onDbconnectError(QString)));
-    connect(db, SIGNAL(dbConnectSuccessful()), this, SLOT(onDbSuccessful()));
+    connect(db, SIGNAL(dbConnectSuccessful(QString)), this, SLOT(onDbSuccessful(QString)));
     connect(db, SIGNAL(emitLocations(vector<pair<QString, QString>>)), this, SLOT(onEmitLocations(vector<pair<QString, QString>>)));
     connect(db, SIGNAL(emitBooks(vector<pair<QString, QString>>)), this, SLOT(onEmitBooks(vector<pair<QString, QString>>)));
     connect(db, SIGNAL(syncProvDone()), this, SLOT(onEmitSyncProvDone()));
@@ -141,26 +142,41 @@ void PatientCareCloudWidget::initialLoad(QString dsn)
 
 void PatientCareCloudWidget::onDbconnectError(QString message)
 {
+    QString returned_dsn = message.split(":").at(0);
     QMessageBox msgBox(this);
     msgBox.setText(message);
     msgBox.setIcon(QMessageBox::Warning);
-    auto* connect = msgBox.addButton("Try to connect", QMessageBox::ActionRole);
+    auto* reconnect = msgBox.addButton("Reconnect", QMessageBox::ActionRole);
+    QPushButton* connect_prev = nullptr;
     auto* exit = msgBox.addButton("Exit Program", QMessageBox::ActionRole);
 
+    if (!m_lastConnectedDsn.isEmpty())
+    {
+        connect_prev = msgBox.addButton("Connect to last successfull", QMessageBox::ActionRole);
+    }
+    
     msgBox.exec();
 
-    if (msgBox.clickedButton() == connect)
+    if (msgBox.clickedButton() == reconnect)
     {
-        initialLoad(m_dsns.at(0));
+        initialLoad(returned_dsn);
     }
+
+    if (msgBox.clickedButton() == connect_prev)
+    {
+        initialLoad(m_lastConnectedDsn);
+    }
+
     else if (msgBox.clickedButton() == exit)
     {
         qApp->quit();
     }
 }
 
-void PatientCareCloudWidget::onDbSuccessful()
+void PatientCareCloudWidget::onDbSuccessful(QString message)
 {
+    m_lastConnectedDsn = message;
+    dsnSelect->selectItem(message);
     QMetaObject::invokeMethod(db, "getLocations", Qt::QueuedConnection);
 }
 
@@ -241,6 +257,12 @@ void PatientCareCloudWidget::onEmitBooks(vector<pair<QString, QString>> v)
     booksSelect->selectBooks(books_to_be_checked);
 }
 
+void PatientCareCloudWidget::onEmitDsnSelected(QString item_text)
+{
+    initialLoad(item_text);
+//    QMetaObject::invokeMethod(db, "connectDatabase", Qt::QueuedConnection, Q_ARG(QString, item_text));
+}
+
 void PatientCareCloudWidget::onEmitLocationSelected(QString item_text)
 {
 
@@ -304,8 +326,6 @@ void PatientCareCloudWidget::onResetButtonClicked()
     if (msgBox.clickedButton() == ok)
     {
         m_bind.clear();
-        m_settings.setValue("Days", "");
-        m_settings.setValue("Time", "");
         m_settings.setValue("bind_json", "");
         m_settings.setValue("P1", "");
         m_settings.setValue("P2", "");
@@ -449,7 +469,7 @@ void PatientCareCloudWidget::onSaveButtonClicked()
     QString tmp = QString(j.dump().c_str()).remove("\\");
     m_settings.setValue("bind_json", tmp);
 
-    QMetaObject::invokeMethod(db, "restartService", Qt::QueuedConnection);
+    setEnabled(true);
 }
 
 void PatientCareCloudWidget::doSeviceRestart()

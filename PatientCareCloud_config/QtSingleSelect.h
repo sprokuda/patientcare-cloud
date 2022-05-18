@@ -24,6 +24,8 @@ public:
     QString getText();
     QStringList getItems(map<string, string> items);
     void selectFirstItem();
+    bool selectItem(QString item_name);
+    void unCheckAll();
     QString getCheckedName();
 public slots:
 

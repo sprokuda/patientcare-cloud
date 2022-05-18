@@ -56,6 +56,11 @@ dbClient::~dbClient()
 
 void dbClient::connectDatabase(QString dsn)
 {
+    if (db.isOpen())
+    {
+        db.close();
+    }
+
     db = QSqlDatabase::addDatabase("QODBC", "mydb");
     db.setDatabaseName(dsn);
     db.setUserName("dba");
@@ -65,12 +70,12 @@ void dbClient::connectDatabase(QString dsn)
     if (!db.open())
     {
         log_query_result("SQL Database is open with", db.lastError().text());
-        emit dbConnectError(db.lastError().text());
+        emit dbConnectError(dsn+": "+db.lastError().text());
         return;
     }
 #endif
 
-    emit dbConnectSuccessful();
+    emit dbConnectSuccessful(dsn);
 }
 
 void dbClient::reOpen()

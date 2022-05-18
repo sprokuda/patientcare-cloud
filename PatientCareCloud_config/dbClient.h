@@ -59,7 +59,7 @@ public:
 signals:
 
     void dbConnectError(QString message);
-    void dbConnectSuccessful();
+    void dbConnectSuccessful(QString message);
     void emitLocations(const vector<pair<QString, QString>>& m);
     void emitBooks(const vector<pair<QString, QString>>& m);
     void emitClinicIDs(vector<vector<QString>> clinic_ids);
