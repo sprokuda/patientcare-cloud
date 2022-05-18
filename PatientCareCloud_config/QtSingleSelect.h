@@ -22,8 +22,8 @@ public:
     void adjustPopupPosition();
     QtSingleSelectPopup& getPopup() { return *popup; };
     QString getText();
-    QStringList getBooks(map<string, string> books);
-    void selectFirstBook();
+    QStringList getItems(map<string, string> items);
+    void selectFirstItem();
     QString getCheckedName();
 public slots:
 
@@ -34,16 +34,14 @@ private slots:
     void onClickCatch(int value);
 signals:
     void editingFinished();
-    void emitLocationSelected(QString item_text);
+    void emitItemSelected(QString item_text);
 private:
-//    friend class QtSingleSelectPopup;
+
     QtSingleSelectPopup* popup;
     QLineEdit* edit;
     QToolButton* button;
 
     QFont font;
-
     QHBoxLayout* ctrlLayout;
-
 };
 

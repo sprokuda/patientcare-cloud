@@ -59,8 +59,6 @@ private slots:
     void onSaveButtonClicked();
     void onExitButtonClicked();
     void doSeviceRestart();
-    void onServiceRestarted();
-    void onServiceRestarFailed();
 
     void closeEvent(QCloseEvent* event);
 

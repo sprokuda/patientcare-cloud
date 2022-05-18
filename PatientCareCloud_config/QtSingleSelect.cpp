@@ -36,7 +36,7 @@ QtSingleSelect::QtSingleSelect( QWidget* parent)
 }
 
 
-void QtSingleSelect::selectFirstBook()
+void QtSingleSelect::selectFirstItem()
 {
     auto& box_list = popup->getBoxList();
     auto& edit_list = popup->getEditList();
@@ -55,7 +55,7 @@ QString QtSingleSelect::getText()
     return edit->text();
 }
 
-QStringList QtSingleSelect::getBooks(map<string,string> books)
+QStringList QtSingleSelect::getItems(map<string,string> items)
 {
     auto text = edit->text();
 
@@ -65,8 +65,8 @@ QStringList QtSingleSelect::getBooks(map<string,string> books)
     QStringList result;
     for (auto it = parts.begin(); it != parts.end(); it++)
     {
-        if (books.find(it->toStdString()) != books.end())
-            result << QString::fromStdString(books.at(it->toStdString()));
+        if (items.find(it->toStdString()) != items.end())
+            result << QString::fromStdString(items.at(it->toStdString()));
     }
 
     result.sort();
@@ -94,7 +94,7 @@ void QtSingleSelect::onShowPopupButtonClicked()
 void QtSingleSelect::onAddItem(const QString& item_text)
 {
     edit->setText(item_text);
-    emit emitLocationSelected(item_text);
+    emit emitItemSelected(item_text);
 }
 
 void QtSingleSelect::onRemoveItem(const QString& item_text)

@@ -23,7 +23,7 @@ PatientCareCloudWidget::PatientCareCloudWidget(QSettings& _settings,const QStrin
     dsnSelect = new QtSingleSelect(this);
 
     dsnSelect->getPopup().setTable(m_dsns);
-    dsnSelect->selectFirstBook();
+    dsnSelect->selectFirstItem();
 
     locationsLabel = new QLabel("Location", this);
     locationsSelect = new QtSingleSelect(this);
@@ -98,16 +98,10 @@ PatientCareCloudWidget::PatientCareCloudWidget(QSettings& _settings,const QStrin
     connect(exitButton, &QPushButton::clicked, this, &PatientCareCloudWidget::onExitButtonClicked);
 
 
-    connect(locationsSelect, SIGNAL(emitLocationSelected(QString)), this, SLOT(onEmitLocationSelected(QString)));
+    connect(locationsSelect, SIGNAL(emitItemSelected(QString)), this, SLOT(onEmitLocationSelected(QString)));
 
     connect(asw, &AdvancedSettingsWidget::advancedSettingsSaved, [&]() {doSeviceRestart(); });
     connect(asw, &AdvancedSettingsWidget::advancedSettingsCanceled, [&]() {asw->hide(); setEnabled(true); });
-
-    connect(db, &dbClient::serviceRestartSuccess, [&]() {onServiceRestarted(); });
-
-    connect(db, &dbClient::serviceRestartFailed, [&]() {onServiceRestarFailed(); });
-
-
 
     connect(msw, &ManualSyncWidget::manSyncDone, [&]() {msw->hide(); setEnabled(true); });
     connect(msw, &ManualSyncWidget::manSyncCanceled, [&]() {msw->hide(); setEnabled(true); });
@@ -121,7 +115,7 @@ PatientCareCloudWidget::PatientCareCloudWidget(QSettings& _settings,const QStrin
     connect(db, SIGNAL(syncProvDone()), this, SLOT(onEmitSyncProvDone()));
     connect(db, SIGNAL(syncProvError(QString)), this, SLOT(onEmitSyncProvError(QString)));
 
-    //!    connect(db, SIGNAL(emitClinicIDs(vector<vector<QString>>)), this, SLOT(onEmitClinicIDs(vector<pair<QString, QString>>)));
+ 
 
 }
 
@@ -180,7 +174,7 @@ void PatientCareCloudWidget::onEmitLocations(vector<pair<QString, QString>> v)
     }
 
     locationsSelect->getPopup().setTable(list);
-    locationsSelect->selectFirstBook();
+    locationsSelect->selectFirstItem();
     selectedLocation = v.at(0).first;
     QMetaObject::invokeMethod(db, "getBooks", Qt::QueuedConnection, Q_ARG(QString, m_locations.front().first));
 }
@@ -465,26 +459,7 @@ void PatientCareCloudWidget::doSeviceRestart()
     QMetaObject::invokeMethod(db, "updateSettings", Qt::DirectConnection);
 }
 
-void PatientCareCloudWidget::onServiceRestarted()
-{
-    QMessageBox msgBox(this);
-    msgBox.setText("Advanced settings are saved\nservice is restarted");
-    msgBox.setIcon(QMessageBox::Information);
-    msgBox.setFont(workingFont);
-    msgBox.exec();
-    setEnabled(true);
-}
 
-
-void PatientCareCloudWidget::onServiceRestarFailed()
-{
-    QMessageBox msgBox(this);
-    msgBox.setText("Advanced settings are saved\nservice restart failed");
-    msgBox.setIcon(QMessageBox::Information);
-    msgBox.setFont(workingFont);
-    msgBox.exec();
-    setEnabled(true);
-}
 
 void PatientCareCloudWidget::onExitButtonClicked()
 {
