@@ -29,7 +29,7 @@ class AdvancedSettingsWidget : public QWidget
 public:
 	AdvancedSettingsWidget(QSettings& _settings, QWidget *parent = Q_NULLPTR);
 	~AdvancedSettingsWidget();
-
+	void loadFromRegistry(const QString& dsn);
 public slots:
 	void showAdjusted();
 

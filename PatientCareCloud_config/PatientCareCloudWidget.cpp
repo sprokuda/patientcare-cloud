@@ -269,7 +269,6 @@ void PatientCareCloudWidget::onEmitBooks(vector<pair<QString, QString>> v)
 void PatientCareCloudWidget::onEmitDsnSelected(QString item_text)
 {
     initialLoad(item_text);
-//    QMetaObject::invokeMethod(db, "connectDatabase", Qt::QueuedConnection, Q_ARG(QString, item_text));
 }
 
 void PatientCareCloudWidget::onEmitLocationSelected(QString item_text)
@@ -361,8 +360,8 @@ void PatientCareCloudWidget::onResetButtonClicked()
 
 void PatientCareCloudWidget::onAdvButtonClicked()
 {
-    //    hide();
     this->setEnabled(false);
+    asw->loadFromRegistry(m_lastConnectedDsn);
     asw->setEnabled(true);
     asw->showAdjusted();
 
@@ -493,8 +492,8 @@ void PatientCareCloudWidget::onSaveButtonClicked()
 void PatientCareCloudWidget::doSeviceRestart()
 {
     asw->hide();
-
     QMetaObject::invokeMethod(db, "updateSettings", Qt::DirectConnection);
+    setEnabled(true);
 }
 
 

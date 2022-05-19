@@ -1,10 +1,11 @@
 #include "AdvancedSettingsWidget.h"
 #include "PatientCareCloudWidget.h"
 
+extern QString registryDsnFolderPath;
+
 AdvancedSettingsWidget::AdvancedSettingsWidget(QSettings& _settings, QWidget *parent)
 	: m_settings(_settings), QWidget(parent)
 {
-//	ui.setupUi(this);
     setWindowTitle(tr("PatientCare"));
 
     this->setFont(QFont("Calibri", 10));
@@ -117,16 +118,8 @@ AdvancedSettingsWidget::AdvancedSettingsWidget(QSettings& _settings, QWidget *pa
     const wchar_t* keyHex = L"000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F";
     crypt.SetEncodedKey(keyHex, L"hex");
 
-    auto dec_address = QString::fromWCharArray(crypt.decryptStringENC(m_settings.value("P1").toString().toStdWString().c_str()));
-    hostEdit->setText(dec_address);
-    auto dec_port = QString::fromWCharArray(crypt.decryptStringENC(m_settings.value("P2").toString().toStdWString().c_str()));
-    portEdit->setText(dec_port);
-    auto dec_username = QString::fromWCharArray(crypt.decryptStringENC(m_settings.value("P3").toString().toStdWString().c_str()));
-    usernameEdit->setText(dec_username);
-    auto dec_password = QString::fromWCharArray(crypt.decryptStringENC(m_settings.value("P4").toString().toStdWString().c_str()));
-    passwordEdit->setText(dec_password);
-
     auto& db = dynamic_cast<PatientCareCloudWidget*>(this->parentWidget())->getClientDb();
+
     connect(&db, SIGNAL(emitClinicIDs(vector<vector<QString>>)), this, SLOT(onEmitClinicIDs(vector<vector<QString>>)));
 }
 
@@ -146,6 +139,32 @@ AdvancedSettingsWidget::~AdvancedSettingsWidget()
     }
 
     tableItems.clear();
+}
+
+void AdvancedSettingsWidget::loadFromRegistry(const QString& dsn)
+{
+
+    QSettings settings_for_dsn(registryDsnFolderPath + dsn, QSettings::Registry32Format);
+
+    auto dec_address = QString::fromWCharArray(
+        crypt.decryptStringENC(settings_for_dsn.value("P1").toString().toStdWString().c_str())
+    );
+    hostEdit->setText(dec_address);
+
+    auto dec_port = QString::fromWCharArray(
+        crypt.decryptStringENC(settings_for_dsn.value("P2").toString().toStdWString().c_str())
+    );
+    portEdit->setText(dec_port);
+
+    auto dec_username = QString::fromWCharArray(
+        crypt.decryptStringENC(settings_for_dsn.value("P3").toString().toStdWString().c_str())
+    );
+    usernameEdit->setText(dec_username);
+
+    auto dec_password = QString::fromWCharArray(
+        crypt.decryptStringENC(settings_for_dsn.value("P4").toString().toStdWString().c_str())
+    );
+    passwordEdit->setText(dec_password);
 }
 
 void AdvancedSettingsWidget::showErrorDialog(const QString& capture)
@@ -235,10 +254,13 @@ void AdvancedSettingsWidget::onSaveClicked()
     const wchar_t* enc_username = crypt.encryptStringENC(usernameEdit->text().toStdWString().c_str());
     const wchar_t* enc_password = crypt.encryptStringENC(passwordEdit->text().toStdWString().c_str());
 
-    m_settings.setValue("P1", QString::fromStdWString(enc_address)); //portEdit->text().toStdString().c_str()
-    m_settings.setValue("P2", QString::fromStdWString(enc_port));
-    m_settings.setValue("P3", QString::fromStdWString(enc_username));
-    m_settings.setValue("P4", QString::fromStdWString(enc_password));
+    auto& lastConnectedDsn = dynamic_cast<PatientCareCloudWidget*>(this->parentWidget())->m_lastConnectedDsn;
+    QSettings settings_for_dsn(registryDsnFolderPath + lastConnectedDsn, QSettings::Registry32Format);
+
+    settings_for_dsn.setValue("P1", QString::fromStdWString(enc_address)); 
+    settings_for_dsn.setValue("P2", QString::fromStdWString(enc_port));
+    settings_for_dsn.setValue("P3", QString::fromStdWString(enc_username));
+    settings_for_dsn.setValue("P4", QString::fromStdWString(enc_password));
 
     emit advancedSettingsSaved();
 }

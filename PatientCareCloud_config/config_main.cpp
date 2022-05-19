@@ -7,6 +7,7 @@
 
 QString absoluteApplicationPath;
 unique_ptr<patientCareLog> logging;
+QString registryDsnFolderPath("HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\ODBC\\ODBC.INI\\");
 
 int main(int argc, char *argv[])
 {
@@ -30,6 +31,9 @@ int main(int argc, char *argv[])
         "HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\ODBC\\ODBC.INI\\ODBC Data Sources",
         QSettings::Registry32Format);
     QStringList dsns = dsnRegistryKeys.allKeys();
+
+//    dsns.removeAt(0);
+//    dsns.removeAt(0);
 
     PatientCareCloudWidget w(settings, dsns);
     w.show();
