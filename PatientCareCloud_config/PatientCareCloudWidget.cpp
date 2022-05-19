@@ -148,13 +148,21 @@ void PatientCareCloudWidget::onDbconnectError(QString message)
     msgBox.setIcon(QMessageBox::Warning);
     auto* reconnect = msgBox.addButton("Reconnect", QMessageBox::ActionRole);
     QPushButton* connect_prev = nullptr;
-    auto* exit = msgBox.addButton("Exit Program", QMessageBox::ActionRole);
 
+    QString dsn_to_reconnect;
     if (!m_lastConnectedDsn.isEmpty())
     {
         connect_prev = msgBox.addButton("Connect to last successfull", QMessageBox::ActionRole);
+        dsn_to_reconnect = m_lastConnectedDsn;
     }
-    
+    else
+    {
+        connect_prev = msgBox.addButton("Connect some other...", QMessageBox::ActionRole);
+        int i = rand() % m_dsns.size();
+        dsn_to_reconnect = m_dsns.at(i);
+    }
+    auto* exit = msgBox.addButton("Exit Program", QMessageBox::ActionRole);
+
     msgBox.exec();
 
     if (msgBox.clickedButton() == reconnect)
@@ -164,7 +172,7 @@ void PatientCareCloudWidget::onDbconnectError(QString message)
 
     if (msgBox.clickedButton() == connect_prev)
     {
-        initialLoad(m_lastConnectedDsn);
+        initialLoad(dsn_to_reconnect);
     }
 
     else if (msgBox.clickedButton() == exit)
