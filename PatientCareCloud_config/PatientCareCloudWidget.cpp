@@ -3,6 +3,7 @@
 #include <json.hpp>
 
 extern QString absoluteApplicationPath;
+extern QString registryDsnFolderPath;
 
 PatientCareCloudWidget::PatientCareCloudWidget(QSettings& _settings,const QStringList& _dsns, QWidget* parent)
     : m_settings(_settings), m_dsns(_dsns), m_lastConnectedDsn(""), QWidget(parent)
@@ -23,7 +24,6 @@ PatientCareCloudWidget::PatientCareCloudWidget(QSettings& _settings,const QStrin
     dsnSelect = new QtSingleSelect(this);
 
     dsnSelect->getPopup().setTable(m_dsns);
-//    dsnSelect->selectFirstItem();
 
     locationsLabel = new QLabel("Location", this);
     locationsSelect = new QtSingleSelect(this);
@@ -211,7 +211,8 @@ void PatientCareCloudWidget::onEmitBooks(vector<pair<QString, QString>> v)
     QStringList books_to_be_checked;
     map<string, string> stored_books;
 
-    auto read_from_registry = m_settings.value("bind_json").toString().toStdString();
+    QSettings settings_for_dsn(registryDsnFolderPath + m_lastConnectedDsn, QSettings::Registry32Format);
+    auto read_from_registry = settings_for_dsn.value("BindJson").toString().toStdString();
 #if 0
     QMessageBox msgBox(this);
     msgBox.setText(QString("json from registry: ") + QString::fromStdString(read_from_registry));
@@ -334,11 +335,13 @@ void PatientCareCloudWidget::onResetButtonClicked()
     if (msgBox.clickedButton() == ok)
     {
         m_bind.clear();
-        m_settings.setValue("bind_json", "");
-        m_settings.setValue("P1", "");
-        m_settings.setValue("P2", "");
-        m_settings.setValue("P3", "");
-        m_settings.setValue("P4", "");
+        QSettings settings_for_dsn(registryDsnFolderPath + m_lastConnectedDsn, QSettings::Registry32Format);
+
+        settings_for_dsn.setValue("BindJson", "");
+        settings_for_dsn.setValue("P1", "");
+        settings_for_dsn.setValue("P2", "");
+        settings_for_dsn.setValue("P3", "");
+        settings_for_dsn.setValue("P4", "");
 
         QMetaObject::invokeMethod(db, "getLocations", Qt::QueuedConnection);
 
@@ -474,8 +477,15 @@ void PatientCareCloudWidget::onSaveButtonClicked()
     {
         j[it->first.c_str()] = it->second.c_str();
     }
-    QString tmp = QString(j.dump().c_str()).remove("\\");
-    m_settings.setValue("bind_json", tmp);
+
+    QSettings settings_for_dsn(registryDsnFolderPath + m_lastConnectedDsn, QSettings::Registry32Format);
+    settings_for_dsn.setValue("BindJson", QString(j.dump().c_str()).remove("\\"));
+
+    QMessageBox msgBox(this);
+    msgBox.setText("Settings are saved");
+    msgBox.setIcon(QMessageBox::Information);
+    msgBox.setFont(workingFont);
+    msgBox.exec();
 
     setEnabled(true);
 }
