@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 
     QSettings settings(QSettings::SystemScope, "Centaur Software", "PatientCare");
 
-    if (!logging->openLogGUI(settings, "config", "PatientCare_Config log file can not be open!"))
+    if (!logging->openLogGUI(settings, "Config\\Log", "config", "PatientCare_Config log file can not be open!"))
         return -111;
 
     absoluteApplicationPath = settings.value("Path").toString();
