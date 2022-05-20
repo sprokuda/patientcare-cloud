@@ -39,7 +39,7 @@ public:
     ~dbClient();
 
     Q_INVOKABLE void connectDatabase(QString dsn);
-    Q_INVOKABLE void updateSettings();
+    Q_INVOKABLE void updateSettings(QString dsn);
     Q_INVOKABLE void getLocations();
     Q_INVOKABLE void getBooks(QString book);
     Q_INVOKABLE void getClinicID();
@@ -54,7 +54,7 @@ public:
     void createDeClinicianDetails();
     bool doUploadClinicianDetails();
     void doDeClinicianDetails(const QStringList& list);
-    void reOpen();
+    void reOpen(QString dsn);
 
 signals:
 
@@ -72,6 +72,7 @@ signals:
 
 private:
     QSqlDatabase db;
+    QString m_lastDsn;
     const QSettings& m_settings;
     CkCrypt2W crypt;
     vector<pair<QString, QString>> m_locations;

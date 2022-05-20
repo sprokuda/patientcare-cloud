@@ -1,6 +1,8 @@
 #include "PatientCareCloudWidget.h"
 #include "ManualSyncWidget.h"
 
+extern QString registryDsnFolderPath;
+
 ManualSyncWidget::ManualSyncWidget(const QSettings& _settings, QWidget *parent)
 	: QWidget(parent), 
 	m_settings(_settings),
@@ -91,7 +93,9 @@ void ManualSyncWidget::adjustPosition()
 
 void ManualSyncWidget::onSyncClicked()
 {
-	QString settings_str = m_settings.value("bind_json").toString();
+	auto& dsn = dynamic_cast<PatientCareCloudWidget*>(this->parentWidget())->m_lastConnectedDsn;
+	QSettings settings_for_dsn(registryDsnFolderPath + dsn, QSettings::Registry32Format);
+	QString settings_str = settings_for_dsn.value("BindJson").toString();
 	if (settings_str.isEmpty())
 	{
 		QMessageBox msgBox(this);
@@ -146,6 +150,9 @@ void ManualSyncWidget::onSyncClicked()
 		msgBox.exec();
 		return;
 	}
+
+	QMetaObject::invokeMethod(db, "updateSettings", Qt::DirectConnection,
+		Q_ARG(QString, dsn));
 
 	QMetaObject::invokeMethod(db, "doManSync", Qt::QueuedConnection,
 		Q_ARG(QString, startDatePicker->getDate()),

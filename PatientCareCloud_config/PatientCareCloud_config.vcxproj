@@ -155,8 +155,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Common\ChilkatFTPS.h" />
+    <ClInclude Include="..\Common\csv_file_headers.h" />
     <ClInclude Include="..\Common\De_Clinician_Details.h" />
-    <ClInclude Include="..\Common\De_FollowApp0403.h" />
+    <ClInclude Include="..\Common\De_FollowApp.h" />
     <ClInclude Include="..\Common\patientCareLog.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -29,6 +29,7 @@ class PatientCareCloudWidget : public QWidget
         friend class QtSingleSelect;
     friend class QtSingleSelectPopup;
     friend class AdvancedSettingsWidget;
+    friend class ManualSyncWidget;
 public:
     PatientCareCloudWidget(QSettings& _settings, const QStringList& _dsns, QWidget* parent = Q_NULLPTR);
     ~PatientCareCloudWidget();

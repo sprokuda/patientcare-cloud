@@ -2,7 +2,7 @@
 #include <iomanip>
 #include "dbClient.h"
 #include "De_Clinician_Details.h"
-#include "De_FollowApp0403.h"
+#include "De_FollowApp.h"
 #include <csv_file_headers.h>
 
 #include<QMetaType>
@@ -12,7 +12,7 @@ using namespace std;
 
 extern unique_ptr<patientCareLog> logging;
 extern QString absoluteApplicationPath;
-
+extern QString registryDsnFolderPath;
 
 void log_query_result(const QString& header, const QString& msg)
 {
@@ -74,18 +74,18 @@ void dbClient::connectDatabase(QString dsn)
         return;
     }
 #endif
-
+    m_lastDsn = dsn;
     emit dbConnectSuccessful(dsn);
 }
 
-void dbClient::reOpen()
+void dbClient::reOpen(QString dsn)
 {
     if (db.isOpen())
     {
         db.close();
     }
     db = QSqlDatabase::addDatabase("QODBC", "mydb");
-    db.setDatabaseName("d4w");
+    db.setDatabaseName(dsn);
     db.setUserName("dba");
     db.setPassword("sql");
 
@@ -101,14 +101,23 @@ void dbClient::reOpen()
 
 }
 
-void dbClient::updateSettings() 
+void dbClient::updateSettings(QString dsn) 
 {
-    auto dec_address = QString::fromWCharArray(crypt.decryptStringENC(m_settings.value("P1").toString().toStdWString().c_str()));
-    auto dec_port = QString::fromWCharArray(crypt.decryptStringENC(m_settings.value("P2").toString().toStdWString().c_str()));
-    auto dec_username = QString::fromWCharArray(crypt.decryptStringENC(m_settings.value("P3").toString().toStdWString().c_str()));
-    auto dec_password = QString::fromWCharArray(crypt.decryptStringENC(m_settings.value("P4").toString().toStdWString().c_str()));
+    QSettings settings_for_dsn(registryDsnFolderPath + dsn, QSettings::Registry32Format);
 
 
+    auto dec_address = QString::fromWCharArray(
+        crypt.decryptStringENC(settings_for_dsn.value("P1").toString().toStdWString().c_str())
+    );
+    auto dec_port = QString::fromWCharArray(
+        crypt.decryptStringENC(settings_for_dsn.value("P2").toString().toStdWString().c_str())
+    );
+    auto dec_username = QString::fromWCharArray(
+        crypt.decryptStringENC(settings_for_dsn.value("P3").toString().toStdWString().c_str())
+    );
+    auto dec_password = QString::fromWCharArray(
+        crypt.decryptStringENC(settings_for_dsn.value("P4").toString().toStdWString().c_str())
+    );
 
     chilkat = make_unique<ChilkatFTPS>(
         dec_address.toStdString().c_str(),
@@ -116,7 +125,6 @@ void dbClient::updateSettings()
         dec_username.toStdString().c_str(),
         dec_password.toStdString().c_str()
         );
-
 }
 
 
@@ -193,7 +201,7 @@ void dbClient::getClinicID()
 void dbClient::createDeFollowApp()
 {
     QSqlQuery query(db);
-    query.exec((string(De_FollowApp0403_1) + string(De_FollowApp0403_2)).c_str());
+    query.exec(De_FollowApp);
     log_query_result("De_FollowApp procedure is created with", db.lastError().text());
 }
 
@@ -206,7 +214,7 @@ void dbClient::doManSync(QString start, QString end, QStringList books)
         return;
     }
     logging->log << "ManSync operation is started" << endl;
-    reOpen();
+    reOpen(m_lastDsn);
     createDeFollowApp();
     doExport(start, end, books);
     bool ok = doUpload();
@@ -301,7 +309,7 @@ void dbClient::doSyncProv(const QStringList& list)
     }
 
     logging->log << "SyncProv operation is started"<< endl;
-    reOpen();
+    reOpen(m_lastDsn);
     createDeClinicianDetails();
     doDeClinicianDetails(list);
     bool ok = doUploadClinicianDetails();

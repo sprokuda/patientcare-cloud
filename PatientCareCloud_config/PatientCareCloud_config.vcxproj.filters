@@ -125,7 +125,10 @@
     <ClInclude Include="..\Common\De_Clinician_Details.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Common\De_FollowApp0403.h">
+    <ClInclude Include="..\Common\De_FollowApp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\csv_file_headers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

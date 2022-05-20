@@ -127,8 +127,6 @@ PatientCareCloudWidget::~PatientCareCloudWidget()
     delete db;
 
     delete headerLayout;
-    delete boxesLayout;
-    delete synchLayout;
 
     delete buttonLayout1;
     delete buttonLayout2;
@@ -376,7 +374,8 @@ void PatientCareCloudWidget::onManButtonClicked()
 
 void PatientCareCloudWidget::onSyncProvButtonClicked()
 {
-    QString settings_str = m_settings.value("bind_json").toString();
+    QSettings settings_for_dsn(registryDsnFolderPath + m_lastConnectedDsn, QSettings::Registry32Format);
+    QString settings_str = settings_for_dsn.value("BindJson").toString();
     if (settings_str.isEmpty())
     {
         QMessageBox msgBox(this);
@@ -410,6 +409,9 @@ void PatientCareCloudWidget::onSyncProvButtonClicked()
             str.append(";").append(string(it.key()));
     }
     QStringList list = QString::fromStdString(str).split(";");
+
+    QMetaObject::invokeMethod(db, "updateSettings", Qt::DirectConnection,
+        Q_ARG(QString, m_lastConnectedDsn));
 
     QMetaObject::invokeMethod(db, "doSyncProv", Qt::QueuedConnection,
         Q_ARG(QStringList, list)
