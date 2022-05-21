@@ -159,6 +159,13 @@
     <ClInclude Include="..\Common\De_Clinician_Details.h" />
     <ClInclude Include="..\Common\De_FollowApp.h" />
     <ClInclude Include="..\Common\patientCareLog.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PatientCareCloud_config.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Common\PatCare2.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
