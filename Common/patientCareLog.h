@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QMessageBox>
 #include <QDir>
+#include <QFont>
 
 #include <fstream>
 
