@@ -34,15 +34,15 @@ QtDatePickerPopup::QtDatePickerPopup(QWidget* parent)
     if (btn)
     {
         QIcon icon;
-        icon.addPixmap(QPixmap(":Client/resources/left-100.png"), QIcon::Normal, QIcon::On); //QString::fromUtf8("N")
-        icon.addPixmap(QPixmap(":Client/resources/left-100.png"), QIcon::Active, QIcon::On);
-        icon.addPixmap(QPixmap(":Client/resources/left-100.png"), QIcon::Selected, QIcon::On);
+        icon.addPixmap(QPixmap(":/PatientCareCloudWidget/resources/left-100.png"), QIcon::Normal, QIcon::On); //QString::fromUtf8("N")
+        icon.addPixmap(QPixmap(":/PatientCareCloudWidget/resources/left-100.png"), QIcon::Active, QIcon::On);
+        icon.addPixmap(QPixmap(":/PatientCareCloudWidget/resources/left-100.png"), QIcon::Selected, QIcon::On);
         btn->setIcon(icon);
 
         btn = calendar->findChild<QToolButton*>("qt_calendar_nextmonth");
-        icon.addPixmap(QPixmap(":Client/resources/right-100.png"), QIcon::Normal, QIcon::On); //QString::fromUtf8("N")
-        icon.addPixmap(QPixmap(":Client/resources/right-100.png"), QIcon::Active, QIcon::On);
-        icon.addPixmap(QPixmap(":Client/resources/right-100.png"), QIcon::Selected, QIcon::On);
+        icon.addPixmap(QPixmap(":/PatientCareCloudWidget/resources/right-100.png"), QIcon::Normal, QIcon::On); //QString::fromUtf8("N")
+        icon.addPixmap(QPixmap(":/PatientCareCloudWidget/resources/right-100.png"), QIcon::Active, QIcon::On);
+        icon.addPixmap(QPixmap(":/PatientCareCloudWidget/resources/right-100.png"), QIcon::Selected, QIcon::On);
         btn->setIcon(icon);
     }
 
@@ -70,9 +70,9 @@ QtDatePickerPopup::QtDatePickerPopup(QWidget* parent)
 
     todayButton = new QToolButton(this);
     QIcon icon;
-    icon.addPixmap(QPixmap(":Client/resources/today-52.png"), QIcon::Normal, QIcon::On); //QString::fromUtf8("N")
-    icon.addPixmap(QPixmap(":Client/resources/today-52.png"), QIcon::Active, QIcon::On);
-    icon.addPixmap(QPixmap(":Client/resources/today-52.png"), QIcon::Selected, QIcon::On);
+    icon.addPixmap(QPixmap(":/PatientCareCloudWidget/resources/today-52.png"), QIcon::Normal, QIcon::On); //QString::fromUtf8("N")
+    icon.addPixmap(QPixmap(":/PatientCareCloudWidget/resources/today-52.png"), QIcon::Active, QIcon::On);
+    icon.addPixmap(QPixmap(":/PatientCareCloudWidget/resources/today-52.png"), QIcon::Selected, QIcon::On);
     todayButton->setIcon(icon);
 
     QHBoxLayout* labelLayout = new QHBoxLayout;

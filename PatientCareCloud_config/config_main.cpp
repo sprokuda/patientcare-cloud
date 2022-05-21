@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
 
-    app.setWindowIcon(QIcon(":/Client/resources/PatCare2.ico"));
+    app.setWindowIcon(QIcon(":/PatientCareCloudWidget/resources/PatCare2.ico"));
 
     QSettings settings(QSettings::SystemScope, "Centaur Software", "PatientCare");
 

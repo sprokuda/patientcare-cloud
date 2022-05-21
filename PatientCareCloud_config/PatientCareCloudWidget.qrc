@@ -1,4 +1,11 @@
 <RCC>
-    <qresource prefix="PatientCareCloudWidget">
+    <qresource prefix="/PatientCareCloudWidget">
+        <file>resources/calendar-back-50.png</file>
+        <file>resources/calendar-next-50.png</file>
+        <file>resources/down-100.png</file>
+        <file>resources/left-100.png</file>
+        <file>resources/right-100.png</file>
+        <file>resources/today-52.png</file>
+        <file>resources/PatCare2.ico</file>
     </qresource>
 </RCC>

@@ -16,9 +16,9 @@ QtSingleSelect::QtSingleSelect( QWidget* parent)
     button = new QToolButton(this);
     button->setContentsMargins(0, 0, 0, 0);
     QIcon icon;
-    icon.addPixmap(QPixmap(":Client/resources/down-100.png"), QIcon::Normal, QIcon::On); //QString::fromUtf8("N")
-    icon.addPixmap(QPixmap(":Client/resources/down-100.png"), QIcon::Active, QIcon::On);
-    icon.addPixmap(QPixmap(":Client/resources/down-100.png"), QIcon::Selected, QIcon::On);
+    icon.addPixmap(QPixmap(":/PatientCareCloudWidget/resources/down-100.png"), QIcon::Normal, QIcon::On); //QString::fromUtf8("N")
+    icon.addPixmap(QPixmap(":/PatientCareCloudWidget/resources/down-100.png"), QIcon::Active, QIcon::On);
+    icon.addPixmap(QPixmap(":/PatientCareCloudWidget/resources/down-100.png"), QIcon::Selected, QIcon::On);
     button->setIcon(icon);
 
     ctrlLayout = new QHBoxLayout(this);
