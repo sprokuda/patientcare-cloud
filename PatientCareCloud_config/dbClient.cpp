@@ -138,13 +138,13 @@ void dbClient::updateSettings(QString dsn)
 void dbClient::getLocations()
 {
     QSqlQuery query(db);
-
+    m_locations.clear();
     query.exec("SELECT \"practice_id\",\"description\" FROM \"dba\".\"practice_locations\";");
     while (query.next())
     {
         m_locations.push_back(make_pair(query.value(0).toString(), query.value(1).toString()));
     }
-//@@    log_query_result("Last error of location query: ", db.lastError().text());
+    log_query_result("Last error of locations query: ", db.lastError().text());
 
     qRegisterMetaType<std::vector<pair<QString, QString>>>("std::vector<pair<QString, QString>>");
     qRegisterMetaType<vector<pair<QString, QString>>>("vector<pair<QString, QString>>");
@@ -156,23 +156,16 @@ void dbClient::getBooks(QString book)
 {
     QSqlQuery query(db);
     m_books.clear();
-//    if (book == "1")
-//    {
-        const char* script = "SELECT app_book_number,app_book_description FROM \"dba\".\"app_books\" \
+
+    const char* script = "SELECT app_book_number,app_book_description FROM \"dba\".\"app_books\" \
     where is_active = 1 and practice_id =%1 and app_book_number > 0;";
 
-        query.exec(QString(script).arg(book));
-        while (query.next())
-        {
+    query.exec(QString(script).arg(book));
+    while (query.next())
+    {
             m_books.push_back(make_pair(query.value(0).toString(), query.value(1).toString()));
-
-        }
-//@@        log_query_result("Last error of location query: ", db.lastError().text());
-//    }
-//    else
-//    {
-//        m_books = m_test_books;
-//    }
+    }
+    log_query_result("Last error of books query: ", db.lastError().text());
 
     qRegisterMetaType<std::vector<pair<QString, QString>>>("std::vector<pair<QString, QString>>");
     qRegisterMetaType<vector<pair<QString, QString>>>("vector<pair<QString, QString>>");

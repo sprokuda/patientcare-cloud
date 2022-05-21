@@ -191,6 +191,15 @@ void PatientCareCloudWidget::onEmitLocations(vector<pair<QString, QString>> v)
 {
     m_locations = v;
     QStringList list;
+    if (v.empty())
+    {
+        QMessageBox msgBox(this);
+        msgBox.setText("The selected DSN has no locations,\ntry to select another one.");
+        msgBox.setIcon(QMessageBox::Critical);
+        msgBox.setFont(workingFont);
+        msgBox.exec();
+        return;
+    }
     for (auto it = v.begin(); it != v.end(); it++)
     {
         list << it->second;
