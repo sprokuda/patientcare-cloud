@@ -54,11 +54,16 @@ bool patientCareLog::openLogGUI(const QSettings& settings, const char* subfolder
         showErrorDialog("Output directory does not exist,\nis not a directory,\nor is not writeable");
     }
 
-
-
-    auto filename = absoluteApplicationPath.toStdString() + "/" + subfolder + "/" +
+    std::string filename;
+    if (QString(postfix).isEmpty())
+        filename = absoluteApplicationPath.toStdString() + "/" + subfolder + "/" +
         QDate::currentDate().toString("yyyy-MM-dd").toStdString() + "_" +
-        QTime::currentTime().toString("hh-mm-ss").toStdString() + "."+postfix+".txt";
+        QTime::currentTime().toString("hh-mm-ss").toStdString() + ".txt";
+    else
+        filename = absoluteApplicationPath.toStdString() + "/" + subfolder + "/" +
+        QDate::currentDate().toString("yyyy-MM-dd").toStdString() + "_" +
+        QTime::currentTime().toString("hh-mm-ss").toStdString() + "." + postfix + ".txt";
+
     try 
     {
         log.open(filename);
