@@ -32,7 +32,7 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="QtSettings">
     <QtInstall>Qt5</QtInstall>
-    <QtModules>core;sql</QtModules>
+    <QtModules>core;sql;gui;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'" Label="QtSettings">
@@ -55,9 +55,25 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'">
+    <ExternalIncludePath>C:\sprokuda\patientcare-cloud\PatientCareCloud_config;C:\sprokuda\patientcare-cloud\Common;C:\libs\nlohmann\single_include;C:\libs\chilkat-9.5.0-x86-vc2019\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'">
+    <ExternalIncludePath>C:\sprokuda\patientcare-cloud\PatientCareCloud_config;C:\sprokuda\patientcare-cloud\Common;C:\libs\nlohmann\single_include;C:\libs\chilkat-9.5.0-x86-vc2019\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
   </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Link>
+      <AdditionalLibraryDirectories>C:\libs\chilkat-9.5.0-x86-vc2019\libs</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ChilkatDbg.lib;ChilkatDbgDll.lib;%(AdditionalDependencies);$(Qt_LIBS_)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>libcmtd.lib</IgnoreSpecificDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Link>
+      <AdditionalLibraryDirectories>C:\libs\chilkat-9.5.0-x86-vc2019\libs</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ChilkatRel.lib;ChilkatRelDll.lib;%(AdditionalDependencies);$(Qt_LIBS_)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="Configuration">
     <ClCompile>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
@@ -85,7 +101,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Common\ChilkatFTPS.cpp" />
+    <ClCompile Include="..\Common\patientCareLog.cpp" />
     <ClCompile Include="extractor_main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Common\ChilkatFTPS.h" />
+    <ClInclude Include="..\Common\De_Clinician_Details.h" />
+    <ClInclude Include="..\Common\De_FollowApp.h" />
+    <ClInclude Include="..\Common\patientCareLog.h" />
+    <QtMoc Include="..\Common\csvWriter.h" />
+    <ClInclude Include="..\Common\csv_file_headers.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
