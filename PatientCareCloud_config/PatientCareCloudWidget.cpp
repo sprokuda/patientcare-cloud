@@ -183,6 +183,7 @@ void PatientCareCloudWidget::onDbSuccessful(QString message)
 {
     m_lastConnectedDsn = message;
     dsnSelect->selectItem(message);
+    QMetaObject::invokeMethod(db, "setWorkingDir", Qt::DirectConnection, Q_ARG(QString, "Config"));
     QMetaObject::invokeMethod(db, "getLocations", Qt::QueuedConnection);
 }
 

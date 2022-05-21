@@ -12,7 +12,7 @@ csvWriter::csvWriter(QObject* parent) : QObject(parent)
 
 }
 
-bool csvWriter::openCSV(const QString& fileName, const vector<string>& header)
+bool csvWriter::openCSV(const QString& fileName, QString workingDir, const vector<string>& header)
 {
     QDir dir(absoluteApplicationPath);
 
@@ -28,17 +28,23 @@ bool csvWriter::openCSV(const QString& fileName, const vector<string>& header)
         bool fld_report = QDir(dir_name).exists();
         if (!fld_report)
         {
-            logging->log << create_and_report(dir_name).toStdString() + "\n";
+            logging->log << create_and_report(dir_name).toStdString() << endl;
         }
         auto cd_report = dir.cd(dir_name);
         if (!cd_report)
         {
-            logging->log << (string("Can t enter directory ") + string("\"dir_name\"\n"));
+            logging->log << (string("Can t enter directory ") + string("\"dir_name\"")).c_str() << endl;
         }
     };
 
 
-    check_directory(absoluteApplicationPath + "/" + "Export");
+    auto subfolders = QString(workingDir).split("\\");
+    QString path = absoluteApplicationPath;
+    for (int i = 0; i < subfolders.size(); i++)
+    {
+        path = path + "\\" + subfolders.at(i);
+        check_directory(path);
+    }
 
     const QFileInfo outputDir(dir.absolutePath());
     if ((!outputDir.exists()) || (!outputDir.isDir()) || (!outputDir.isWritable()))

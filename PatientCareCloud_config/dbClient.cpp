@@ -75,7 +75,14 @@ void dbClient::connectDatabase(QString dsn)
     }
 #endif
     m_lastDsn = dsn;
+    m_workingDir = dsn + "\\" + "Export";
+    log_query_result("SQL Database is open with", db.lastError().text());
     emit dbConnectSuccessful(dsn);
+}
+
+void dbClient::setWorkingDir(QString name)
+{
+    m_workingDir = name + "\\" + "Export";
 }
 
 void dbClient::reOpen(QString dsn)
@@ -234,7 +241,7 @@ void dbClient::doManSync(QString start, QString end, QStringList books)
 void dbClient::doExport(QString start, QString end, QStringList books)
 {
     unique_ptr<csvWriter> apps = make_unique<csvWriter>(this);
-    if (!apps->openCSV("Appointments.csv", apps_header)) return;
+    if (!apps->openCSV("Appointments.csv", m_workingDir, apps_header)) return;
 
     QStringList startL = start.split("/");
     qint64 startJ = QDate(startL.at(2).toInt(), startL.at(1).toInt(), startL.at(0).toInt()).toJulianDay();
@@ -273,7 +280,10 @@ bool dbClient::doUpload()
     if (chilkat->connect())
     {
         bool ok1 = chilkat->changeRemoteDir("Aftercare");
-        bool ok2 = chilkat->sendFile(absoluteApplicationPath.toStdString() + "/Export" + "\\" + "Appointments.csv", remote_file_prefix + "Appointments.csv");
+        bool ok2 = chilkat->sendFile(absoluteApplicationPath.toStdString() +
+            "\\" + m_workingDir.toStdString() + 
+            "\\" + "Appointments.csv", 
+            remote_file_prefix + "Appointments.csv");
         bool ok3 = chilkat->disconnect();
         return ok1 && ok2 && ok3;
     }
@@ -288,7 +298,10 @@ void dbClient::doFileDelete(const QString& file_to_delete)
     {
         logging->log << "Deleting of " << file_to_delete.toStdString() << " file of exported data is enabled" << endl;
 
-        if (QFile::remove(absoluteApplicationPath + QString("\\Export\\") + file_to_delete))
+        if (QFile::remove(
+            absoluteApplicationPath + 
+            "\\" + m_workingDir +
+            "\\" + file_to_delete))
             logging->log << file_to_delete.toStdString() << " file of exported data is deleted" << endl;
         else
             logging->log << "Appointments.csv file of exported data cannot be deleted for some reason" << endl;
@@ -341,7 +354,11 @@ bool dbClient::doUploadClinicianDetails()
     if (chilkat->connect())
     {
         bool ok1 = chilkat->changeRemoteDir("Members");
-        bool ok2 = chilkat->sendFile(absoluteApplicationPath.toStdString() + "/Export" + "\\" + "Members.csv", remote_file_prefix + "Members.csv");
+        bool ok2 = chilkat->sendFile(absoluteApplicationPath.toStdString() +
+            "\\" + m_workingDir.toStdString() +
+            "\\" + "Members.csv",
+            remote_file_prefix + "Members.csv"
+        );
         bool ok3 = chilkat->disconnect();
         return ok1 && ok2 && ok3;
     }
@@ -352,7 +369,7 @@ bool dbClient::doUploadClinicianDetails()
 void dbClient::doDeClinicianDetails(const QStringList& list)
 {
     unique_ptr<csvWriter> members = make_unique<csvWriter>(this);
-    if (!members->openCSV("Members.csv", members_header)) return;
+    if (!members->openCSV("Members.csv", m_workingDir, members_header)) return;
     QSqlQuery query(db);
 
     for (int i = 0; i < list.size(); i++)

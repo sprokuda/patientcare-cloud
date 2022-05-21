@@ -39,6 +39,7 @@ public:
     ~dbClient();
 
     Q_INVOKABLE void connectDatabase(QString dsn);
+    Q_INVOKABLE void setWorkingDir(QString name);
     Q_INVOKABLE void updateSettings(QString dsn);
     Q_INVOKABLE void getLocations();
     Q_INVOKABLE void getBooks(QString book);
@@ -73,6 +74,7 @@ signals:
 private:
     QSqlDatabase db;
     QString m_lastDsn;
+    QString m_workingDir;
     const QSettings& m_settings;
     CkCrypt2W crypt;
     vector<pair<QString, QString>> m_locations;

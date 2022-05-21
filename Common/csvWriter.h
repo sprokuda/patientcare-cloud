@@ -29,7 +29,7 @@ public:
 
     ~csvWriter();
 
-    bool openCSV(const QString& fileName, const vector<string>& header);
+    bool openCSV(const QString& fileName, QString workingDir, const vector<string>& header);
 
     template<typename T>
     void writeArray(vector<T> data)
