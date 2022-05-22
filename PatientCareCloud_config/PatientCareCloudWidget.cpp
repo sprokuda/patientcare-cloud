@@ -27,15 +27,9 @@ PatientCareCloudWidget::PatientCareCloudWidget(QSettings& _settings,const QStrin
 
     locationsLabel = new QLabel("Location", this);
     locationsSelect = new QtSingleSelect(this);
-    //       QStringList locations = { "location1","location2","location3" };
-    //       locationSelect->getPopup().setTable(locations);
-    //       locationSelect->selectFirstBook();
 
     booksLabel = new QLabel("Appointment Books", this);
     booksSelect = new QtMultiSelect(this);
-    /*       QStringList books = { "book1","book2","book3"};
-           booksSelect->getPopup().setTable(books);
-           booksSelect->selectAllBooks();*/
 
     headerLayout = new QVBoxLayout();
 
@@ -49,7 +43,6 @@ PatientCareCloudWidget::PatientCareCloudWidget(QSettings& _settings,const QStrin
     headerLayout->addWidget(booksLabel);
     headerLayout->addWidget(booksSelect);
     headerLayout->addStretch();
-
 
     resetButton = new QPushButton("Reset", this);
     advButton = new QPushButton("Adv Settings", this);

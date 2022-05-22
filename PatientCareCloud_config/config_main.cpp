@@ -34,6 +34,15 @@ int main(int argc, char *argv[])
 
 //    dsns.removeAt(0);
 //    dsns.removeAt(0);
+//    dsns.clear();
+    if (dsns.isEmpty())
+    {
+        QMessageBox msgBox(nullptr);
+        msgBox.setText("No one DSNis found,\ program exits");
+        msgBox.setIcon(QMessageBox::Critical);
+        msgBox.exec();
+        return -112;
+    }
 
     PatientCareCloudWidget w(settings, dsns);
     w.show();
