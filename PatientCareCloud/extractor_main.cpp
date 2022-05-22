@@ -1,4 +1,4 @@
-#include <QtCore/QCoreApplication>
+#include <QtWidgets/QApplication>
 #include <QSettings>
 #include <CkGlobal.h>
 
@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     CkGlobal glob;
     glob.UnlockBundle("CENTAU.CB1032023_BXXvnwRxjC1N");
 
-    QCoreApplication a(argc, argv);
+    QApplication a(argc, argv);
 
     logging = make_unique<patientCareLog>();
 
