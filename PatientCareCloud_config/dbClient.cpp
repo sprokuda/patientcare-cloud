@@ -34,19 +34,6 @@ dbClient::dbClient(const QSettings& _settings, QObject* parent) : QObject(parent
     const wchar_t* keyHex = L"000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F";
     crypt.SetEncodedKey(keyHex, L"hex");
 
-    auto dec_address = QString::fromWCharArray(crypt.decryptStringENC(m_settings.value("P1").toString().toStdWString().c_str()));
-    auto dec_port = QString::fromWCharArray(crypt.decryptStringENC(m_settings.value("P2").toString().toStdWString().c_str()));
-    auto dec_username = QString::fromWCharArray(crypt.decryptStringENC(m_settings.value("P3").toString().toStdWString().c_str()));
-    auto dec_password = QString::fromWCharArray(crypt.decryptStringENC(m_settings.value("P4").toString().toStdWString().c_str()));
-
-
-
-    chilkat = make_unique<ChilkatFTPS>(
-        dec_address.toStdString().c_str(),
-        dec_port.toInt(),
-        dec_username.toStdString().c_str(),
-        dec_password.toStdString().c_str()
-        );
 }
 
 dbClient::~dbClient()
@@ -54,7 +41,7 @@ dbClient::~dbClient()
 
 }
 
-void dbClient::connectDatabase(QString dsn)
+bool dbClient::connectDatabase(QString dsn)
 {
     if (db.isOpen())
     {
@@ -71,13 +58,15 @@ void dbClient::connectDatabase(QString dsn)
     {
         log_query_result("SQL Database is open with", db.lastError().text());
         emit dbConnectError(dsn+": "+db.lastError().text());
-        return;
+        return false;
     }
 #endif
     m_lastDsn = dsn;
     m_workingDir = dsn + "\\" + "Export";
     log_query_result("SQL Database is open with", db.lastError().text());
+    updateSettings(dsn);
     emit dbConnectSuccessful(dsn);
+    return true;
 }
 
 void dbClient::setWorkingDir(QString name)

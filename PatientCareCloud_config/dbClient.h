@@ -38,7 +38,7 @@ public:
     dbClient(const QSettings& _settings, QObject* parent = nullptr);
     ~dbClient();
 
-    Q_INVOKABLE void connectDatabase(QString dsn);
+    Q_INVOKABLE bool connectDatabase(QString dsn);
     Q_INVOKABLE void setWorkingDir(QString name);
     Q_INVOKABLE void updateSettings(QString dsn);
     Q_INVOKABLE void getLocations();
