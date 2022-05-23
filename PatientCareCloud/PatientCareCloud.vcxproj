@@ -55,10 +55,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'">
-    <ExternalIncludePath>C:\sprokuda\patientcare-cloud\PatientCareCloud_config;C:\sprokuda\patientcare-cloud\Common;C:\libs\nlohmann\single_include;C:\libs\chilkat-9.5.0-x86-vc2019\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
+    <ExternalIncludePath>C:\sprokuda\patientcare-cloud\PatientCareCloud_config;C:\sprokuda\patientcare-cloud\Common;C:\libs\nlohmann\single_include\nlohmann;C:\libs\chilkat-9.5.0-x86-vc2019\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'">
-    <ExternalIncludePath>C:\sprokuda\patientcare-cloud\PatientCareCloud_config;C:\sprokuda\patientcare-cloud\Common;C:\libs\nlohmann\single_include;C:\libs\chilkat-9.5.0-x86-vc2019\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
+    <ExternalIncludePath>C:\sprokuda\patientcare-cloud\PatientCareCloud_config;C:\sprokuda\patientcare-cloud\Common;C:\libs\nlohmann\single_include\nlohmann;C:\libs\chilkat-9.5.0-x86-vc2019\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Link>
@@ -102,7 +102,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Common\ChilkatFTPS.cpp" />
+    <ClCompile Include="..\Common\csvWriter.cpp" />
     <ClCompile Include="..\Common\patientCareLog.cpp" />
+    <ClCompile Include="..\PatientCareCloud_config\dbClient.cpp" />
     <ClCompile Include="extractor_main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -110,6 +112,7 @@
     <ClInclude Include="..\Common\De_Clinician_Details.h" />
     <ClInclude Include="..\Common\De_FollowApp.h" />
     <ClInclude Include="..\Common\patientCareLog.h" />
+    <QtMoc Include="..\PatientCareCloud_config\dbClient.h" />
     <ClInclude Include="resource.h" />
     <QtMoc Include="..\Common\csvWriter.h" />
     <ClInclude Include="..\Common\csv_file_headers.h" />

@@ -28,6 +28,12 @@
     <ClCompile Include="..\Common\patientCareLog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\PatientCareCloud_config\dbClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\csvWriter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Common\ChilkatFTPS.h">
@@ -51,6 +57,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="..\Common\csvWriter.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="..\PatientCareCloud_config\dbClient.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
