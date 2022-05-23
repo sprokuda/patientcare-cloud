@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     if (dsns.isEmpty())
     {
         QMessageBox msgBox(nullptr);
-        msgBox.setText("No one DSNis found,\ program exits");
+        msgBox.setText("No one DSN is found,\n program exits");
         msgBox.setIcon(QMessageBox::Critical);
         msgBox.exec();
         return -112;

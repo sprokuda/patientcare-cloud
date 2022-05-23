@@ -100,8 +100,6 @@ PatientCareCloudWidget::PatientCareCloudWidget(QSettings& _settings,const QStrin
     connect(msw, &ManualSyncWidget::manSyncDone, [&]() {msw->hide(); setEnabled(true); });
     connect(msw, &ManualSyncWidget::manSyncCanceled, [&]() {msw->hide(); setEnabled(true); });
 
-    void serviceRestartSuccess();
-    void serviceRestartFailed();
     connect(db, SIGNAL(dbConnectError(QString)), this, SLOT(onDbconnectError(QString)));
     connect(db, SIGNAL(dbConnectSuccessful(QString)), this, SLOT(onDbSuccessful(QString)));
     connect(db, SIGNAL(emitLocations(vector<pair<QString, QString>>)), this, SLOT(onEmitLocations(vector<pair<QString, QString>>)));
@@ -200,7 +198,7 @@ void PatientCareCloudWidget::onEmitLocations(vector<pair<QString, QString>> v)
 
     locationsSelect->getPopup().setTable(list);
     locationsSelect->selectFirstItem();
-    selectedLocation = v.at(0).first;
+    selectedLocation = m_locations.at(0).first;
     QMetaObject::invokeMethod(db, "getBooks", Qt::QueuedConnection, Q_ARG(QString, m_locations.front().first));
 }
 
@@ -456,7 +454,8 @@ void PatientCareCloudWidget::onSaveButtonClicked()
     else
         m_bind.at(location_number) = books_numbers;
 
-    auto read_from_registry = m_settings.value("bind_json").toString().toStdString();
+    QSettings settings_for_dsn(registryDsnFolderPath + m_lastConnectedDsn, QSettings::Registry32Format);
+    auto read_from_registry = settings_for_dsn.value("BindJson").toString().toStdString();
 
     nlohmann::json j;
     if (!read_from_registry.empty())
@@ -482,7 +481,6 @@ void PatientCareCloudWidget::onSaveButtonClicked()
         j[it->first.c_str()] = it->second.c_str();
     }
 
-    QSettings settings_for_dsn(registryDsnFolderPath + m_lastConnectedDsn, QSettings::Registry32Format);
     settings_for_dsn.setValue("BindJson", QString(j.dump().c_str()).remove("\\"));
 
     QMessageBox msgBox(this);
