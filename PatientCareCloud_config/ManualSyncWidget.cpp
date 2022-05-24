@@ -109,7 +109,7 @@ void ManualSyncWidget::onSyncClicked()
 	nlohmann::json j;
 	try
 	{
-		j = nlohmann::json::parse(m_settings.value("bind_json").toString().toStdString().c_str());
+		j = nlohmann::json::parse(settings_for_dsn.value("BindJson").toString().toStdString().c_str());
 	}
 	catch (...)
 	{

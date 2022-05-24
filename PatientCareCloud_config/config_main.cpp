@@ -7,7 +7,7 @@
 
 QString absoluteApplicationPath;
 unique_ptr<patientCareLog> logging;
-QString registryDsnFolderPath("HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\ODBC\\ODBC.INI\\");
+QString registryDsnFolderPath("HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Centaur Software\\PatientCare\\");
 
 int main(int argc, char *argv[])
 {
