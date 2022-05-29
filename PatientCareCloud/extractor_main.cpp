@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
         cout << "Wrong number of arguments is given,\n\
                  It can be a single argument <DSN_name>\n\
                  or\n\
-                 it can be two arguments <DSN_name> <date> as <yyyy-mm-dd>."
+                 it can be two arguments <DSN_name> <Date> as <yyyy-mm-dd>."
             << endl;
         return -110;
     }
@@ -58,15 +58,16 @@ int main(int argc, char *argv[])
     if (argc == 2)
     {
         enteredDSN.append(argv[1]);
-        cout << enteredDSN.toStdString() << endl;
+        cout << "The entered DSN is " << enteredDSN.toStdString() << endl;
         enteredDate = QDate::currentDate().toString("yyyy-MM-dd");
+        cout << "The Date is " << enteredDate.toStdString() << endl;
     }
     if (argc == 3)
     {
         enteredDSN.append(argv[1]);
-        enteredDSN.append(argv[2]);
-        cout << enteredDSN.toStdString() << endl;
-        cout << enteredDate.toStdString() << endl;
+        enteredDate.append(argv[2]);
+        cout << "The entered DSN is " << enteredDSN.toStdString() << endl;
+        cout << "The entered Date is " << enteredDate.toStdString() << endl;
     }
 
     QApplication a(argc, argv);
@@ -139,7 +140,6 @@ int main(int argc, char *argv[])
             date_parts.at(0);
 
         db.createDeFollowApp();
-
         db.doExport(reformattedDate, reformattedDate, books);
         bool ok = db.doUpload();
         db.doFileDelete("Appointments.csv");
