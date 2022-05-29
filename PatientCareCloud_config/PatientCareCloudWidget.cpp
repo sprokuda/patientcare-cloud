@@ -263,6 +263,7 @@ void PatientCareCloudWidget::onEmitBooks(vector<pair<QString, QString>> v)
     booksSelect->getPopup().setTable(list);
     booksSelect->setText("");
     booksSelect->selectBooks(books_to_be_checked);
+    m_bind.clear();
 }
 
 void PatientCareCloudWidget::onEmitDsnSelected(QString item_text)
