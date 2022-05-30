@@ -56,14 +56,14 @@ bool dbClient::connectDatabase(QString dsn)
 #if 1
     if (!db.open())
     {
-        log_query_result("SQL Database is open with", db.lastError().text());
+        log_query_result(dsn + " SQL Database is open with", db.lastError().text());
         emit dbConnectError(dsn+": "+db.lastError().text());
         return false;
     }
 #endif
     m_lastDsn = dsn;
     m_workingDir = dsn + "\\" + "Export";
-    log_query_result("SQL Database is open with", db.lastError().text());
+    log_query_result(dsn + " SQL Database is open with", db.lastError().text());
     updateSettings(dsn);
     emit dbConnectSuccessful(dsn);
     return true;
@@ -88,11 +88,11 @@ void dbClient::reOpen(QString dsn)
 
     if (!db.open())
     {
-        log_query_result("SQL Database is reopen with", db.lastError().text());
+        log_query_result(dsn + " SQL Database is reopen with", db.lastError().text());
         return;
     }
 
-    log_query_result("SQL Database is reopen with", db.lastError().text());
+    log_query_result(dsn + " SQL Database is reopen with", db.lastError().text());
 
 
 }
@@ -100,7 +100,6 @@ void dbClient::reOpen(QString dsn)
 void dbClient::updateSettings(QString dsn) 
 {
     QSettings settings_for_dsn(registryDsnFolderPath + dsn, QSettings::Registry32Format);
-
 
     auto dec_address = QString::fromWCharArray(
         crypt.decryptStringENC(settings_for_dsn.value("P1").toString().toStdWString().c_str())
@@ -190,7 +189,7 @@ void dbClient::getClinicID()
 void dbClient::createDeFollowApp()
 {
     QSqlQuery query(db);
-    query.exec(De_FollowApp);
+    query.exec((QString(De_FollowApp1)+QString(De_FollowApp2)).toStdString().c_str());
     log_query_result("De_FollowApp procedure is created with", db.lastError().text());
 }
 
@@ -250,7 +249,7 @@ void dbClient::doExport(QString start, QString end, QStringList books)
             }
         }
     }
-
+    log_query_result("Last error of de_FollowApp query: ", db.lastError().text());
 }
 
 
@@ -368,6 +367,7 @@ void dbClient::doDeClinicianDetails(const QStringList& list)
             members->writeArray(line);
         }
     }
+    log_query_result("Last error of de_Clinician_Details query: ", db.lastError().text());
 }
 
 
