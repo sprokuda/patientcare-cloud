@@ -189,7 +189,8 @@ void dbClient::getClinicID()
 void dbClient::createDeFollowApp()
 {
     QSqlQuery query(db);
-    query.exec((QString(De_FollowApp1)+QString(De_FollowApp2)).toStdString().c_str());
+    query.exec((QString(De_FollowApp0403_1)+QString(De_FollowApp0403_2)));
+    //query.exec(QString(De_FollowAppTest));
     log_query_result("De_FollowApp procedure is created with", db.lastError().text());
 }
 

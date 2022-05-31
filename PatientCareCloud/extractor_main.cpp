@@ -11,7 +11,7 @@ using namespace std;
 
 QString absoluteApplicationPath;
 unique_ptr<patientCareLog> logging;
-QString registryDsnFolderPath("HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\ODBC\\ODBC.INI\\");
+QString registryDsnFolderPath("HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Centaur Software\\PatientCare\\");
 
 void MessageOutput(QtMsgType type, const QMessageLogContext& context, const QString& msg)
 {
@@ -133,6 +133,7 @@ int main(int argc, char *argv[])
     QStringList books = QString::fromStdString(str_books).split(";");
     QStringList locations = QString::fromStdString(str_locations).split(";");
 
+    db.connectDatabase(enteredDSN);
     {
         auto date_parts = enteredDate.split("-");
         auto reformattedDate = date_parts.at(2) + "/" +
@@ -145,7 +146,7 @@ int main(int argc, char *argv[])
         db.doFileDelete("Appointments.csv");
     }
 
-    {
+    {   
         db.createDeClinicianDetails();
         db.doDeClinicianDetails(locations);
         bool ok = db.doUploadClinicianDetails();
