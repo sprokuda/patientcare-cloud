@@ -14,6 +14,14 @@ extern unique_ptr<patientCareLog> logging;
 extern QString absoluteApplicationPath;
 extern QString registryDsnFolderPath;
 
+QString removeQuotesEndSpaces(QString line)
+{
+    line.remove("\r\n");
+    while (line.endsWith(" ")) line.remove(line.size() - 1, 1);
+    line.remove("\"");
+    return line;
+}
+
 void log_query_result(const QString& header, const QString& msg)
 {
     if (msg.isEmpty()) logging->log << header.toStdString() << ": " << "no error" << endl;
@@ -244,7 +252,7 @@ void dbClient::doExport(QString start, QString end, QStringList books)
                 vector<string> line;
                 for (int k = 0; k < 20; k++)
                 {
-                    line.push_back(query.value(k).toString().toStdString());
+                    line.push_back(removeQuotesEndSpaces(query.value(k).toString()).toStdString());
                 }
                 apps->writeArray(line);
             }

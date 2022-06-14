@@ -38,6 +38,7 @@ void MessageOutput(QtMsgType type, const QMessageLogContext& context, const QStr
 }
 
 
+
 int main(int argc, char *argv[])
 {
     CkGlobal glob;
@@ -60,7 +61,7 @@ int main(int argc, char *argv[])
         enteredDSN.append(argv[1]);
         cout << "The entered DSN is " << enteredDSN.toStdString() << endl;
         enteredDate = QDate::currentDate().toString("yyyy-MM-dd");
-        cout << "The Date is " << enteredDate.toStdString() << endl;
+        cout << "The current Date is " << enteredDate.toStdString() << endl;
     }
     if (argc == 3)
     {
@@ -94,6 +95,10 @@ int main(int argc, char *argv[])
         msgBox.exec();
         return -112;
     }
+
+    logging->log << "The entered DSN is " << enteredDSN.toStdString() << endl;
+    logging->log << "The Date is " << enteredDate.toStdString() << endl;
+
 
     nlohmann::json bindJson;
     try
@@ -156,3 +161,4 @@ int main(int argc, char *argv[])
     cout << "The extraction and upload are completed,\nprogram may be closed." << endl;
     return 0;
 }
+
