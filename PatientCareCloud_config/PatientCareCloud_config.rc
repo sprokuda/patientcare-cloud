@@ -61,8 +61,8 @@ IDI_ICON1               ICON                    "C:\\sprokuda\\patientcare-cloud
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,1
- PRODUCTVERSION 1,0,0,1
+ FILEVERSION 1,0,6,16
+ PRODUCTVERSION 1,0,6,16
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -79,12 +79,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Centaur Software"
             VALUE "FileDescription", "Centaur PatientCareCloud configurator"
-            VALUE "FileVersion", "1.0.0.1"
+            VALUE "FileVersion", "1.0.6.16"
             VALUE "InternalName", "PatientCareCloud_config.exe"
             VALUE "LegalCopyright", "Copyright (C) 2022 Centaur Software"
             VALUE "OriginalFilename", "PatientCareCloud_config.exe"
             VALUE "ProductName", "PatientCareCloud_config"
-            VALUE "ProductVersion", "1.0.0.1"
+            VALUE "ProductVersion", "1.0.6.16"
         END
     END
     BLOCK "VarFileInfo"

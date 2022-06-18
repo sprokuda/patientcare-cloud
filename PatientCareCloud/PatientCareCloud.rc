@@ -61,8 +61,8 @@ IDI_ICON1               ICON                    "resources\\PatCare.ico"
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,1
- PRODUCTVERSION 1,0,0,1
+ FILEVERSION 1,0,6,16
+ PRODUCTVERSION 1,0,6,16
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -79,12 +79,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Centaur Software"
             VALUE "FileDescription", "Centaur PatientCareCloud extractor"
-            VALUE "FileVersion", "1.0.0.1"
+            VALUE "FileVersion", "1.0.6.16"
             VALUE "InternalName", "PatientCareCloud.exe"
             VALUE "LegalCopyright", "Copyright (C) Centaur Software 2022"
             VALUE "OriginalFilename", "PatientCareCloud.exe"
             VALUE "ProductName", "PatientCareCloud"
-            VALUE "ProductVersion", "1.0.0.1"
+            VALUE "ProductVersion", "1.0.6.16"
         END
     END
     BLOCK "VarFileInfo"
